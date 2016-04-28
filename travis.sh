@@ -4,7 +4,7 @@ set -euo pipefail
 
 function installTravisTools {
   mkdir ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v27 | tar zx --strip-components 1 -C ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/ba7c09cf3619523b723070d9fdd743e7b912ffa6 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
 
@@ -13,24 +13,9 @@ installTravisTools
 case "$TEST" in
 
 ci)
-  
-  CURRENT_VERSION=`maven_expression "project.version"`
-
-  if [[ $CURRENT_VERSION =~ "-SNAPSHOT" ]]; then
-    echo "Found SNAPSHOT version"
-    # Do not deploy a SNAPSHOT version but the release version related to this build
-    set_maven_build_version $TRAVIS_BUILD_NUMBER
-  else
-    echo "Found RELEASE version"
-  fi
-
-  
- 
-  # the profile "deploy-sonarsource" is defined in parent pom v28+
-  mvn deploy \
-    -Pdeploy-sonarsource \
-    -B -e -V
-
+  #deploy pull request artifacts to repox to start QA
+  export DEPLOY_PULL_REQUEST=true
+  regular_mvn_build_deploy_analyze  
   ;;
 
 *)
