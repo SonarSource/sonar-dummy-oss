@@ -10,7 +10,7 @@
 
   <groupId>org.sonarsource.dummy</groupId>
   <artifactId>dummy-oss</artifactId>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>SonarSource :: dummy</name>
@@ -18,7 +18,7 @@
 
   <properties>  
     <sonarVersion>4.5.7</sonarVersion>  
-    <gitRepositoryName>sonar-dummy</gitRepositoryName>
+    <gitRepositoryName>sonar-dummy-oss</gitRepositoryName>
   </properties>
 
   <modules>
