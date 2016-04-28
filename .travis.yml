@@ -1,0 +1,24 @@
+language: java
+sudo: false
+install: true
+
+jdk:
+  - oraclejdk7
+
+script: ./travis.sh
+
+env:
+  - TEST=ci
+
+matrix:
+  fast_finish: true
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+
+notifications:
+  email: false
+  webhooks:
+    - secure: "bS1Vsq40kQBS2lWehjGygky08EJUReCJB4a+Yt690cexmO7fCfu7Y1LOFvOo/hih4lY1KpSEpaWS6URolQMpFduxkQi2tEeH4XS/w1r5rHa1gv1NO9sfvz7dEDKpvGZtvF3sZJ5fqwE5UZst7VV31eq3wppoPouSazexlfT7wvAdBbjDAqgjrkDWs9Y9Lnve6xmkgIBhrGwJE3FPgXMSrneEa9Ubq+khu8DR8GqyMLt+IA8DfLs+ak+sj4zmxyWOnFOZTC3KESeZaz5UnRfbWS63TBG+BTMwELTVehtdw9gDKF8eiUZkRDS6Vh14CbCNr+Srasrul6Jlut+ABhGk0vQvt3LifsT/H2PM2GsKPSPdqrSXte09A+lTJ+ohPVVSGbJIxq+3nMTM1/pFyM6GgDaxdkWtW5Zv0yXerI2pKFcrMSxp5E0ve2TPRuuWr4Gt3FkvRttDqKdFIozPtdOlEnLbdQNHPCdQHljH0hhwvBm3FZeraSxuFR7HssYaZSFgyJIJCfB7IIvAfBSKtqSbXgljKh7ZR4Qsil5lxue67JWo5rQxIy5R+IEX4QY/SBNv6gpimUAFih1VjCYHlqnRk5h28mWIX5aIo6vfCvOW0goR1YrmtySogXVsTGjVJmue90KA8exUk8mvwEw2JCjlugG/mp5OV9nwQnzLkrSBzOY="
+
