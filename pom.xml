@@ -22,7 +22,7 @@
   </properties>
 
   <modules>
-    <module>sonar-dummy-plugin-oss</module>
+    <module>sonar-dummy-oss-plugin</module>
   </modules>
 
   <dependencyManagement>
