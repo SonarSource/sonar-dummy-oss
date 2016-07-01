@@ -35,5 +35,5 @@ test: off
 
 notifications:
 - provider: Webhook
-  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=travisci-hook&token={{token}}&delay=0sec
+  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=travisci-hook&token=simpletoken&delay=0sec
   on_build_success: true
