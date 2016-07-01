@@ -35,6 +35,6 @@ test: off
 
 notifications:
 - provider: Webhook
-  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=appveyor-hook&token=simpletoken&delay=0sec&eventName={{eventName}}&eventData={{eventData}}
+  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=appveyor-hook&token=simpletoken&delay=0sec&eventName={{passed}}&eventData={{jobs}}
   method: GET
   on_build_success: true
