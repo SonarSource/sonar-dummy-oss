@@ -24,9 +24,16 @@ install:
   - echo %JAVA_HOME%
   - if "%RUN%" == "ruling" (git submodule update --init --recursive)
 
+environment:
+  token:
+    secure: Rt4VQ6Vg/oGHkipocKlpJg==
 
 build_script:
   - ps: ./appveyor.ps1
 
 test: off
 
+notifications:
+- provider: Webhook
+  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=travisci-hook&token={{token}}&delay=0sec
+  on_build_success: true
