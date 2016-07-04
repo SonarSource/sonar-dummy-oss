@@ -35,6 +35,6 @@ test: off
 
 notifications:
 - provider: Webhook
-  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=appveyor-hook&token={{token}}&delay=0sec&GIT_SHA1={{commitId}}&GITHUB_BRANCH={{branch}}&CI_BUILD_NUMBER={{buildNumber}}&CI_BUILD_NAME={{projectName}}
+  url: https://cix.sonarsource.com/buildByToken/buildWithParameters?job=appveyor-hook&token=simpletoken&delay=0sec&GIT_SHA1={{commitId}}&GITHUB_BRANCH={{branch}}&CI_BUILD_NUMBER={{buildNumber}}&CI_BUILD_NAME={{projectName}}
   method: GET
   on_build_success: true
