@@ -2,4 +2,4 @@
 
 ### Build status
 
-[![Build Status](https://api.travis-ci.org/SonarSource/sonar-dummy.svg)](https://travis-ci.org/SonarSource/sonar-dummy-oss)
+[![Build Status](https://travis-ci.org/SonarSource/sonar-dummy-oss.svg?branch=master)](https://travis-ci.org/SonarSource/sonar-dummy-oss)
