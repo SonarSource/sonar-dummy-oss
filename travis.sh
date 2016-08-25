@@ -13,8 +13,11 @@ installTravisTools
 case "$TEST" in
 
 ci)
+  export ARTIFACTS_TO_PUBLISH=sonar-dummy-oss-plugin.jar,sonar-dummy-oss-plugin.pom
+
   #deploy pull request artifacts to repox to start QA
   export DEPLOY_PULL_REQUEST=true
+
   regular_mvn_build_deploy_analyze  
   ;;
 
