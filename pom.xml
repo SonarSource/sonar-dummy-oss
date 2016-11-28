@@ -136,7 +136,7 @@
                     <vcs.branch>{{GIT_BRANCH|TRAVIS_BRANCH|APPVEYOR_REPO_BRANCH}}</vcs.branch>
                     <build.name>${gitRepositoryName}</build.name>
                     <build.number>{{BUILD_ID|TRAVIS_BUILD_NUMBER|APPVEYOR_BUILD_NUMBER}}</build.number>
-                    <sonar.plugin.version>${project.version}</sonar.plugin.version>
+                    <version>${project.version}</version>
                     <sonar.plugin.key>dummy-oss</sonar.plugin.key>
                   </deployProperties>
                   <licenses>
