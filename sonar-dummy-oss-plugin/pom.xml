@@ -21,6 +21,8 @@
     <sonar.pluginName>DummyOss</sonar.pluginName>
     <sonar.skipDependenciesPackaging>true</sonar.skipDependenciesPackaging>
     <sonar.addMavenDescriptor>false</sonar.addMavenDescriptor>
+    <sonar.plugin.version>${project.version}</sonar.plugin.version>
+    <sonar.plugin.key>dummy-oss</sonar.plugin.key>
   </properties>
 
   <dependencies>
