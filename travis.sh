@@ -8,5 +8,4 @@ function installTravisTools {
   source ~/.local/bin/install
 }
 
-cd test-sq-upload
 ./test.sh
