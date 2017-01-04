@@ -1,3 +1,4 @@
 #!/bin/bash
 
-test-sq-upload/test.sh
+cd test-sq-upload
+./test.sh
