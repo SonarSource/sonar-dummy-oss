@@ -7,5 +7,5 @@ function installTravisTools {
   curl -sSL https://github.com/SonarSource/travis-utils/tarball/v33 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
-
+installTravisTools
 ./test.sh
