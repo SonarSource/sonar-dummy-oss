@@ -9,6 +9,7 @@ function installTravisTools {
 }
 
 installTravisTools
+. installJDK8
 
 case "$TEST" in
 
