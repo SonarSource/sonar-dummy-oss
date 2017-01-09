@@ -13,9 +13,10 @@ installTravisTools
 case "$TEST" in
 
 ci)
+  curl -L -v https://next.sonarqube.com/sonarqube/batch_bootstrap/index
   #deploy pull request artifacts to repox to start QA
-  export DEPLOY_PULL_REQUEST=true
-  regular_mvn_build_deploy_analyze  
+  #export DEPLOY_PULL_REQUEST=true
+  #regular_mvn_build_deploy_analyze  
   ;;
 
 *)
