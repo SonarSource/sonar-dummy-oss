@@ -9,13 +9,14 @@ function installTravisTools {
 }
 
 installTravisTools
+. installJDK8
 
 case "$TEST" in
 
 ci)
   #deploy pull request artifacts to repox to start QA
   export DEPLOY_PULL_REQUEST=true
-  regular_mvn_build_deploy_analyze  
+  regular_mvn_build_deploy_analyze
   ;;
 
 *)
