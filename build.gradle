@@ -1,0 +1,63 @@
+plugins {
+  id "org.sonarqube" version "2.5"
+  id "com.jfrog.artifactory" version "4.5.2"
+}
+
+allprojects  {
+  apply plugin: 'maven-publish'
+  apply plugin: 'com.jfrog.artifactory'
+
+  group = 'org.sonarsource.dummy'
+}
+
+sonarqube {
+  properties {
+    property 'sonar.projectName', 'SonarSource :: dummy'
+  }
+}
+
+artifactory {
+  clientConfig.setIncludeEnvVars(true)
+  clientConfig.setEnvVarsExcludePatterns('*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command,*token*,*TOKEN*,*LOGIN*,*login*')
+  contextUrl = System.getenv('ARTIFACTORY_URL')
+  publish {    
+    repository {
+      repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO')
+      username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME')
+      password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD')      
+    }
+    defaults {
+      properties = [
+        'vcs.revision': (System.getenv('GIT_COMMIT') ?: System.getenv('TRAVIS_COMMIT')),
+        'vcs.branch': (System.getenv('GIT_BRANCH') ?: System.getenv('TRAVIS_BRANCH')),
+        'build.name': rootProject.name,
+        'build.number': (System.getenv('BUILD_ID') ?: System.getenv('TRAVIS_BUILD_NUMBER'))
+      ]
+      publishConfigs('archives')
+      publishPom = true // Publish generated POM files to Artifactory (true by default)
+      publishIvy = false // Publish generated Ivy descriptor files to Artifactory (true by default)
+    }
+    clientConfig.info.setBuildNumber(System.getenv('TRAVIS_BUILD_NUMBER'))
+  }  
+}
+
+subprojects {
+  apply plugin: 'java'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+  tasks.withType(JavaCompile) {
+  	options.encoding = 'UTF-8'
+  }
+
+  repositories {
+    maven { 
+      name = 'sonarsource'
+      url "https://repox.sonarsource.com/sonarsource"
+    }
+    mavenLocal()
+  }
+
+  configurations.all {
+  }
+    
+}

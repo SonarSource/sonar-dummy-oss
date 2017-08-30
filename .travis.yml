@@ -7,9 +7,6 @@ jdk:
 
 script: ./travis.sh
 
-env:
-  - TEST=ci
-
 matrix:
   fast_finish: true
 

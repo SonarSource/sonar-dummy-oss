@@ -1,0 +1,2 @@
+rootProject.name = 'sonar-dummy-oss'
+include ':sonar-dummy-oss-plugin'
