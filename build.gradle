@@ -13,6 +13,7 @@ allprojects  {
 sonarqube {
   properties {
     property 'sonar.projectName', 'SonarSource :: dummy'
+    property 'sonar.projectKey', 'org.sonarsource.dummy:dummy-oss'
   }
 }
 
