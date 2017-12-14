@@ -1,4 +1,4 @@
-@Library('SonarSource@master') _
+@Library('SonarSource@notif') _
 
 pipeline {
   agent {
@@ -18,8 +18,7 @@ pipeline {
   stages {
     stage('NotifyBurgr') {
       steps {
-        burgrNotifyQaStarted()
-        githubNotifyQaPending()
+        sendAllNotificationQaStarted()
       }
     }
     stage('QA') {
@@ -32,21 +31,8 @@ pipeline {
         }
       }
       post {
-        success {
-          burgrNotifyQaPassed()
-          githubNotifyQaSuccess()
-        }
-        failure {
-          burgrNotifyQaFailed()
-          githubNotifyQaFailed()
-        }
-        unstable {
-          burgrNotifyQaFailed()
-          githubNotifyQaFailed()
-        }
-        aborted {
-          burgrNotifyQaAborted()
-          githubNotifyQaError()
+        always {
+          sendAllNotificationQaResult()
         }
       }
     }
@@ -55,13 +41,8 @@ pipeline {
         repoxPromoteBuild()
       }
       post {
-        success {
-          burgrNotifyPromotePassed()
-          githubNotifyPromoteSuccess()
-        }
-        failure {
-          burgrNotifyPromoteFailed()
-          githubNotifyPromoteFailed()
+        always {
+          sendAllNotificationPromote()
         }
       }
     }
