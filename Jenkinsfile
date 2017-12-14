@@ -1,4 +1,4 @@
-@Library('SonarSource@notif') _
+@Library('SonarSource@1.2') _
 
 pipeline {
   agent {
