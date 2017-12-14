@@ -14,4 +14,7 @@ installTravisTools
 . ~/.local/bin/installJDK8
 . ~/.local/bin/installMaven35
 
+# allow deployment of PR artifacts to repox with
+export DEPLOY_PULL_REQUEST=true
+
 regular_mvn_build_deploy_analyze
