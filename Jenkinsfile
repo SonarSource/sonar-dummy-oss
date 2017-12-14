@@ -23,10 +23,12 @@ pipeline {
       }
     }
     stage('QA') {
-      withMaven(maven: MAVEN_TOOL) {
-        mavenSetBuildVersion()
-        dir('its') {
-          sh 'mvn clean verify -e -V'
+      steps {
+        withMaven(maven: MAVEN_TOOL) {
+          mavenSetBuildVersion()
+          dir('its') {
+            sh 'mvn clean verify -e -V'
+          }
         }
       }
       post {
