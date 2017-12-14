@@ -12,7 +12,8 @@ matrix:
 
 cache:
   directories:
-    - '$HOME/.m2/repository'
+    - $HOME/.m2/repository
+    - $HOME/maven
 
 notifications:
   email: false
