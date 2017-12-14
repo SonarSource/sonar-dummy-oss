@@ -14,6 +14,12 @@ installTravisTools
 . ~/.local/bin/installJDK8
 . ~/.local/bin/installMaven35
 
+# When a pull request is open on the branch, then the job related
+# to the branch does not need to be executed and should be canceled.
+# It does not book slaves for nothing.
+# @TravisCI please provide the feature natively, like at AppVeyor or CircleCI ;-)
+cancel_branch_build_with_pr || if [[ $? -eq 1 ]]; then exit 0; fi
+
 # allow deployment of PR artifacts to repox with
 export DEPLOY_PULL_REQUEST=true
 
