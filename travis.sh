@@ -12,7 +12,7 @@ function installTravisTools {
 }
 installTravisTools
 . ~/.local/bin/installJDK8
-. ~/.local/bin/installMaven35
+. ~/.local/bin/installMaven33
 
 # When a pull request is open on the branch, then the job related
 # to the branch does not need to be executed and should be canceled.
