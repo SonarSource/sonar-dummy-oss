@@ -7,7 +7,7 @@ export DEPLOY_PULL_REQUEST=true
 
 function installTravisTools {
   mkdir -p ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/3bee6ed1a642af22b79a7b6f49d037ebfd9067c6 | tar zx --strip-components 1 -C ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v44 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
 installTravisTools
