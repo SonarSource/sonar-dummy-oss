@@ -1,4 +1,4 @@
-@Library('SonarSource@1.2') _
+@Library('SonarSource@tv/fixtimezone') _
 
 pipeline {
   agent {
