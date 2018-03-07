@@ -1,4 +1,4 @@
-@Library('SonarSource@1.2') _
+@Library('SonarSource@1.5') _
 
 pipeline {
   agent {
@@ -23,12 +23,7 @@ pipeline {
     }
     stage('QA') {
       steps {
-        withMaven(maven: MAVEN_TOOL) {
-          mavenSetBuildVersion()
-          dir('its') {
-            sh 'mvn clean verify -e -V'
-          }
-        }
+        echo 'Doing nothing'
       }
       post {
         always {
