@@ -12,12 +12,12 @@ matrix:
 
 cache:
   directories:
-    - $HOME/.m2/repository
-    - $HOME/maven
+    - $HOME/.sonar
+    - $HOME/jvm
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
 notifications:
   email: false
   webhooks:
     - secure: "CM6Rhk/ZiZgJI3As2usRM6QIyHo6Wc8Hlgj7Y5muqAw3U8WM3mwIFZ6zSL5gn/0PC8LDjuD7vY5PbgJhFCbrCmtuKqDd+ZEliw/kYS5AYpwEcE1wnMkEcgjqD4V5NtG4AKv2U7zmVMj4SeZ0LP98e0eM91b34ejyVv+faH97qqg8syXroUmmht6QgCGXFeBqvlj+QzaZ7wl00kgkPm+kevPz58iYmUGO2Vp9aY+5/ySJIosTr4ZBq6dhjdnBtmjQLQkNkXFIcGQefa0JhH7hjWvmZD0BdaC0vsG5cLt/sEVNUO6xAYZQQ3hheHB5kMANEIgpOzw1K+mk5aeVy5+FeQ5PIFge+AD6E4V0QIZnrbD0JH/NCx9JpnyCy720uKxgZTFETM6kN4Q6IXxBFn805xjq0KyQ6oNiHC2QMVeN9A97A5pqzG+jqKub3QFbfsmAjvO3IdFhRaGsh+Fkc0FSE6KWFbCOP56QXXveAiG6J3NmkIy/2UZmrQoxEivK1xHZMvWqSDVWWCLlDz0NaL33sj/8LYIpFXqdyilHmSAlFIuvs1ajJoXLdGXAy0uxpEQ4mJpyYbZxcs3/AObIMrXtw3kNf7AwS4eD93/1uw74RKeUe3f2o8iL2PYNJ5BXsvcjYtpAv69ePnW2lJAhYnRxZmNqKCayerZdeQ7nV13B6Bg="
-
-

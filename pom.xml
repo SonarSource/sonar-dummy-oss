@@ -24,7 +24,6 @@
   </properties>
 
   <modules>
-    <module>sonar-dummy-oss-plugin</module>
     <module>its</module>
   </modules>
 
@@ -66,5 +65,3 @@
     <developerConnection>scm:git:git@github.com:SonarSource/sonar-dummy-oss.git</developerConnection>
     <url>https://github.com/SonarSource/sonar-dummy-oss</url>
   </scm>
-
-</project>
