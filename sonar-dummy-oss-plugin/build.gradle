@@ -21,6 +21,13 @@ jar {
   }
 }
 
+sonarqube {
+  properties {
+    property 'sonar.projectName', 'SonarSource :: dummy :: Plugin'
+    property 'sonar.moduleKey', 'org.sonarsource.dummy:sonar-dummy-oss-plugin'
+  }
+}
+
 publishing {
   publications {
     mavenJava(MavenPublication) {
