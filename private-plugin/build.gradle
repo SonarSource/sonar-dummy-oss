@@ -1,5 +1,6 @@
 
 description = 'SonarSource :: dummy :: Plugin'
+group = 'com.sonarsource.dummy'
 
 dependencies {
   testCompile group: 'junit', name: 'junit', version:'4.11'
