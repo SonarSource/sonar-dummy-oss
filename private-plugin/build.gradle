@@ -40,10 +40,25 @@ publishing {
 
 artifactory {
   publish {
+    contextUrl = System.getenv('ARTIFACTORY_URL')
     repository {
       repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO_PRIVATE')
       username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME_PRIVATE')
       password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD_PRIVATE')
     }
+    defaults {
+      properties = [
+              'vcs.revision': (System.getenv('GIT_COMMIT') ?: System.getenv('GIT_COMMIT')),
+              'vcs.branch': (System.getenv('GIT_BRANCH') ?: System.getenv('GIT_BRANCH')),
+              'build.name': rootProject.name,
+              'build.number': (System.getenv('BUILD_ID') ?: System.getenv('BUILD_NUMBER'))
+      ]
+      publications('mavenJava')
+      publishPom = true // Publish generated POM files to Artifactory (true by default)
+      publishIvy = false // Publish generated Ivy descriptor files to Artifactory (true by default)
+    }
+    clientConfig.info.setBuildNumber(System.getenv('BUILD_NUMBER'))
+    clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_DOWNLOAD', "${project.group}:sonar-dummy-oss-plugin:jar")
+    clientConfig.info.addEnvironmentProperty('PROJECT_VERSION', "${version}")
   }
 }
