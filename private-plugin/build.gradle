@@ -37,3 +37,13 @@ publishing {
     }
   }
 }
+
+artifactory {
+  publish {
+    repository {
+      repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO_PRIVATE')
+      username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME_PRIVATE')
+      password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD_PRIVATE')
+    }
+  }
+}
