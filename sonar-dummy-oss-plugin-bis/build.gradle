@@ -1,0 +1,36 @@
+
+description = 'SonarSource :: dummy :: Plugin Bis'
+
+dependencies {
+  testCompile group: 'junit', name: 'junit', version:'4.11'
+  testCompile group: 'org.easytesting', name: 'fest-assert', version:'1.4'
+  compileOnly group: 'org.codehaus.sonar', name: 'sonar-plugin-api', version:'4.5.7'
+}
+
+jar {
+  manifest {
+    attributes(
+      'Plugin-Key': 'dummy-oss',
+      'Plugin-Version': project.version,
+      'Plugin-Class': 'org.sonarsource.dummy.plugin.DummyPlugin',
+      'Plugin-ChildFirstClassLoader': 'false',
+      'Sonar-Version': project.version,
+      'SonarLint-Supported': 'true',
+      'Plugin-Name': 'DummyOssBis'
+    )
+  }
+}
+
+sonarqube {
+  skipProject = true
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact sourcesJar
+      artifact javadocJar
+    }
+  }
+}
