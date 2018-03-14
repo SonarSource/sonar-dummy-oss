@@ -47,8 +47,5 @@ artifactory {
       username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME_PRIVATE')
       password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD_PRIVATE')
     }
-    defaults {
-      publications('mavenJava')
-    }
   }
 }
