@@ -1,5 +1,6 @@
 
 description = 'SonarSource :: dummy :: Plugin'
+def projectName = 'SonarSource :: dummy :: Plugin'
 
 dependencies {
   testCompile group: 'junit', name: 'junit', version:'4.11'
@@ -23,15 +24,18 @@ jar {
 
 sonarqube {
   properties {
-    property 'sonar.projectName', 'SonarSource :: dummy :: Plugin'
+    property 'sonar.projectName', project.name
     property 'sonar.moduleKey', 'org.sonarsource.dummy:sonar-dummy-oss-plugin'
   }
 }
 
 publishing {
-  publications {
+  publications {    
     mavenJava(MavenPublication) {
       from components.java
+      pom.withXml {
+        asNode().children().last() + pomConfig
+      }
       artifact sourcesJar
       artifact javadocJar
     }

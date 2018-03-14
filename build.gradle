@@ -61,6 +61,36 @@ subprojects {
     from javadoc.destinationDir
   }
 
+  ext { 
+    pomConfig = {
+      //name projectName
+      name 'projectName'
+      //description project.description
+      description 'project.description'
+      url 'http://redirect.sonarsource.com/plugins/dummy.html'
+      organization {
+        name 'SonarSource'
+        url 'http://www.sonarsource.com'
+      }
+      licenses {
+        license {
+          name 'GNU LGPL 3'
+          url 'http://www.gnu.org/licenses/lgpl.txt'
+          distribution 'repo'
+        }
+      }
+      scm {
+        url 'https://github.com/SonarSource/sonar-dummy-oss'
+      }
+      developers {
+        developer {
+          id 'drautureau-sonarsource'
+          name 'David Rautureau'
+        }
+      }
+    }
+  }
+
   repositories {
     maven { 
       name = 'sonarsource'
@@ -69,7 +99,6 @@ subprojects {
     mavenLocal()
   }
 }
-
 
 artifactory {
   clientConfig.setIncludeEnvVars(true)

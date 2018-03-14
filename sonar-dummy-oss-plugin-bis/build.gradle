@@ -29,6 +29,9 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
+      pom.withXml {
+        asNode().children().last() + pomConfig
+      }
       artifact sourcesJar
       artifact javadocJar
     }
