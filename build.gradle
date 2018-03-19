@@ -14,7 +14,7 @@ buildscript {
 apply plugin: 'org.sonarqube'
 sonarqube {
   properties {
-    property 'sonar.projectName', 'SonarSource :: dummy'
+    property 'sonar.projectName', projectTitle
     property 'sonar.projectKey', 'org.sonarsource.dummy:dummy-oss'
   }
 }
@@ -63,10 +63,8 @@ subprojects {
 
   ext { 
     pomConfig = {
-      //name projectName
-      name 'projectName'
-      //description project.description
-      description 'project.description'
+      name projectTitle
+      description description
       url 'http://redirect.sonarsource.com/plugins/dummy.html'
       organization {
         name 'SonarSource'
