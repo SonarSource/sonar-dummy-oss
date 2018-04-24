@@ -17,7 +17,7 @@ pipeline {
   stages {
     stage('NotifyBurgr') {
       steps {
-        sendAllNotificationQaStarted()
+        sendAllNotificationQaStarted('dummy')
       }
     }
     stage('QA') {
@@ -26,7 +26,7 @@ pipeline {
       }
       post {
         always {
-          sendAllNotificationQaResult()
+          sendAllNotificationQaResult('dummy')
         }
       }
     }
