@@ -1,4 +1,4 @@
-@Library('SonarSource@1.5') _
+@Library('SonarSource@feature/dr/overwite-qa-step') _
 
 pipeline {
   agent {
@@ -13,12 +13,11 @@ pipeline {
   }
   environment {
     SONARSOURCE_QA = 'true'
-    MAVEN_TOOL = 'Maven 3.3.x'
   }
   stages {
     stage('NotifyBurgr') {
       steps {
-        sendAllNotificationQaStarted()
+        sendAllNotificationQaStarted('dummy')
       }
     }
     stage('QA') {
@@ -27,7 +26,7 @@ pipeline {
       }
       post {
         always {
-          sendAllNotificationQaResult()
+          sendAllNotificationQaResult('dummy')
         }
       }
     }
