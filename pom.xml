@@ -8,7 +8,6 @@
     <version>41</version>
   </parent>
 
- 
   <groupId>org.sonarsource.dummy</groupId>
   <artifactId>dummy-oss</artifactId>
   <version>2.5-SNAPSHOT</version>
