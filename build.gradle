@@ -66,6 +66,7 @@ subprojects {
       name = 'sonarsource'
       url "https://repox.sonarsource.com/sonarsource"
     }
+    
     mavenLocal()
   }
 }
