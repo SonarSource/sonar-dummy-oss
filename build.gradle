@@ -95,5 +95,5 @@ artifactory {
     clientConfig.info.setBuildNumber(System.getenv('BUILD_NUMBER'))
     clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_PUBLISH', "${project.group}:sonar-dummy-oss-plugin:jar")
     clientConfig.info.addEnvironmentProperty('PROJECT_VERSION', "${version}")
-  }  
+  }
 }
