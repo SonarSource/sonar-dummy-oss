@@ -1,4 +1,4 @@
-@Library('SonarSource@1.5') _
+@Library('SonarSource@feature/dr/display-donwload-and-publish') _
 
 pipeline {
   agent {
