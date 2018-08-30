@@ -14,13 +14,9 @@ pipeline {
     MAVEN_TOOL = 'Maven 3.3.x'
   }
   stages {
-    stage('NotifyBurgr') {
-      steps {
-        sendAllNotificationQaStarted()
-      }
-    }
     stage('QA') {
       steps {
+        sendAllNotificationQaStarted()
         echo 'Doing nothing'
       }
       post {
