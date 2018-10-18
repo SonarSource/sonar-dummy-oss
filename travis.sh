@@ -17,4 +17,4 @@ installTravisTools
 # @TravisCI please provide the feature natively, like at AppVeyor or CircleCI ;-)
 cancel_branch_build_with_pr || if [[ $? -eq 1 ]]; then exit 0; fi
 
-regular_gradle_build_deploy_analyze
+regular_mvn_build_deploy_analyze
