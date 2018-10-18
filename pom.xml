@@ -20,7 +20,6 @@
   <properties>  
     <sonarVersion>4.5.7</sonarVersion>  
     <gitRepositoryName>sonar-dummy-oss</gitRepositoryName>
-    <artifactsToPublish>${project.groupId}:sonar-dummy-oss-plugin:jar</artifactsToPublish>
     <bintrayPackage>org.sonarsource.dummy</bintrayPackage>
   </properties>
 
