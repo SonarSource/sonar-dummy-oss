@@ -1,4 +1,4 @@
-@Library('SonarSource@2.0') _
+@Library('SonarSource@master') _
 
 pipeline {
   agent none
