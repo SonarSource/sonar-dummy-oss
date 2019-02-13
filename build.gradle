@@ -30,10 +30,11 @@ allprojects  {
   }
 
   repositories {
-    def repository = project.hasProperty('cix') ? 'sonarsource-qa' : 'sonarsource'
+    mavenLocal()
+    mavenCentral()
     maven {
-      url "https://repox.sonarsource.com/${repository}"
-    }
+      url System.env.'ARTIFACTORY_URL' + '/sonarsource'
+    }    
   }
 }
 
@@ -59,15 +60,6 @@ subprojects {
   task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
-  }
-
-  repositories {
-    maven { 
-      name = 'sonarsource'
-      url "https://repox.sonarsource.com/sonarsource"
-    }
-    
-    mavenLocal()
   }
 }
 
