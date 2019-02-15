@@ -29,7 +29,7 @@ allprojects  {
     version = version.replace('-SNAPSHOT', ".0.$buildNumber")
   }
 
-  repositories 
+  repositories {
     mavenLocal()
     mavenCentral()
     maven {
