@@ -1,4 +1,4 @@
-@Library('SonarSource@master') _
+@Library('SonarSource@task/dr/add-buildNumber-to-burgr-promote-notification') _
 
 pipeline {
   agent none
