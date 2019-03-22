@@ -1,4 +1,4 @@
-@Library('SonarSource@master') _
+@Library('SonarSource@task/dr/use-burgr-promote-api') _
 
 pipeline {
   agent none
