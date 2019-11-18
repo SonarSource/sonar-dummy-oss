@@ -23,6 +23,19 @@ container_definition: &CONTAINER_DEFINITION
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
+setup_gradle_cache_template: &SETUP_GRADLE_CACHE
+  gradle_cache:
+     folder: .gradle/caches
+  create_gradle_directory_script:
+    - mkdir -p "${CIRRUS_WORKING_DIR}/.gradle"
+
+cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
+  cleanup_gradle_script:
+    - /usr/bin/find "${CIRRUS_WORKING_DIR}/.gradle/caches/" -name "*.lock" -type f -delete
+    - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/4.10.2/"
+    - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/journal-1/"
+    - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/build-cache-1/"
+
 build_task:
   gke_container:
     <<: *CONTAINER_DEFINITION
@@ -35,12 +48,11 @@ build_task:
     SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+  <<: *SETUP_GRADLE_CACHE
   build_script:
     - source cirrus-env BUILD
     - regular_gradle_build_deploy_analyze
-  cleanup_before_cache_script: cleanup_maven_repository
+  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
  
 promote_task:
   depends_on:
@@ -56,7 +68,7 @@ promote_task:
     PROMOTE_URL: ENCRYPTED[!e22ed2e34a8f7a1aea5cff653585429bbd3d5151e7201022140218f9c5d620069ec2388f14f83971e3fd726215bc0f5e!]
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.xml:sonar-xml-plugin:jar
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
-  script: cirrus_promote_maven
-  cleanup_before_cache_script: cleanup_maven_repository
+  script:
+    - source cirrus-env PROMOTE
+    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST?multi=true"
+    - burgr-notify-promotion
