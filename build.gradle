@@ -5,8 +5,8 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.6.2'
-    classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
+    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.8.1'
+    classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1'
   }
 }
 
@@ -64,28 +64,33 @@ subprojects {
 }
 
 artifactory {
-  clientConfig.setIncludeEnvVars(true)
-  clientConfig.setEnvVarsExcludePatterns('*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command,*token*,*TOKEN*,*LOGIN*,*login*')
-  contextUrl = System.getenv('ARTIFACTORY_URL')
-  publish {    
-    repository {
-      repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO')
-      username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME')
-      password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD')      
+    clientConfig.setIncludeEnvVars(true)
+    clientConfig.setEnvVarsExcludePatterns('*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command,*token*,*TOKEN*,*LOGIN*,*login*')
+    contextUrl = System.getenv('ARTIFACTORY_URL')
+    publish {
+        repository {
+            repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO')
+            username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME')
+            password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD')
+        }
+        defaults {
+            properties = [
+                'build.name': 'sonar-dummy-oss',
+                'build.number': System.getenv('BUILD_NUMBER'),
+                'pr.branch.target': System.getenv('PULL_REQUEST_BRANCH_TARGET'),
+                'pr.number': System.getenv('PULL_REQUEST_NUMBER'),
+                'vcs.branch': System.getenv('GIT_BRANCH'),
+                'vcs.revision': System.getenv('GIT_COMMIT'),
+                'version': version
+            ]
+            publications('mavenJava')
+            publishPom = true
+            publishIvy = false
+        }
     }
-    defaults {
-      properties = [
-        'vcs.revision': (System.getenv('GIT_COMMIT') ?: System.getenv('GIT_COMMIT')),
-        'vcs.branch': (System.getenv('GIT_BRANCH') ?: System.getenv('GIT_BRANCH')),
-        'build.name': rootProject.name,
-        'build.number': (System.getenv('BUILD_ID') ?: System.getenv('BUILD_NUMBER'))
-      ]
-      publications('mavenJava')
-      publishPom = true // Publish generated POM files to Artifactory (true by default)
-      publishIvy = false // Publish generated Ivy descriptor files to Artifactory (true by default)
-    }
+
+    clientConfig.info.setBuildName('sonar-dummy-oss')
     clientConfig.info.setBuildNumber(System.getenv('BUILD_NUMBER'))
-    clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_PUBLISH', "${project.group}:sonar-dummy-oss-plugin:jar")
+    // The name of this variable is important because it's used by the delivery process when extracting version from Artifactory build info.
     clientConfig.info.addEnvironmentProperty('PROJECT_VERSION', "${version}")
-  }
 }
