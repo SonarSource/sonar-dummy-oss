@@ -1,0 +1,29 @@
+name: sonar-release
+# This workflow is triggered when publishing a new github release
+on:
+  release:
+    types:
+      - published
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  sonar_release:
+    runs-on: ubuntu-latest
+    name: Start release process
+    steps:
+      - name: Checkout release action
+        uses: actions/checkout@v2
+        with:
+          repository: SonarSource/gh-action_LT_release
+
+      - name: LT release
+        id: lt_release
+        uses: SonarSource/gh-action_LT_release@master
+
+      - name: Release action results
+        if: always()
+        run: |
+          echo "${{ steps.lt_release.outputs.releasability }}"
+          echo "${{ steps.lt_release.outputs.release }}"
