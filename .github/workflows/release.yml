@@ -20,6 +20,8 @@ jobs:
 
       - name: LT release
         id: lt_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: SonarSource/gh-action_LT_release@master
 
       - name: Release action results
