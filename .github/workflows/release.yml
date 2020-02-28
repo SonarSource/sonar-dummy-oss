@@ -32,15 +32,15 @@ jobs:
 
       #slack notifications
       - name: Notify success on Slack
-        uses: Ilshidur/action-slack@1.6.2
+        uses: Ilshidur/action-slack@2.0.0
         env:
           SLACK_OVERRIDE_MESSAGE: 'Release successful'
         with:
           args: 'Release successful'
       - name: Notify failures on Slack
-        uses: Ilshidur/action-slack@1.6.2
+        uses: Ilshidur/action-slack@2.0.0
         if: failure()
         env:
-          SLACK_OVERRIDE_MESSAGE: 'Release failed, see the logs at https://github.com/SonarSource/sonar-dummy-oss/actions'
+          SLACK_OVERRIDE_MESSAGE: 'Release failed, see the logs at https://github.com/{{ env.GITHUB_REPOSITORY }}/actions'
         with:
           args: 'Fail to release'
