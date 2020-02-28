@@ -33,14 +33,10 @@ jobs:
       #slack notifications
       - name: Notify success on Slack
         uses: Ilshidur/action-slack@2.0.0
-        env:
-          SLACK_OVERRIDE_MESSAGE: 'Release successful for {{ env.GITHUB_REPOSITORY }} by {{ env.GITHUB_ACTOR }}'
         with:
-          args: 'Release successful'
+          args: "Release successful for {{ GITHUB_REPOSITORY }} by {{ GITHUB_ACTOR }}"        
       - name: Notify failures on Slack
         uses: Ilshidur/action-slack@2.0.0
         if: failure()
-        env:
-          SLACK_OVERRIDE_MESSAGE: 'Release failed, see the logs at https://github.com/{{ env.GITHUB_REPOSITORY }}/actions'
         with:
-          args: 'Fail to release'
+          args: "Release failed, see the logs at https://github.com/{{ GITHUB_REPOSITORY }}/actions"
