@@ -50,6 +50,8 @@ build_task:
     SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
+    ORG_GRADLE_PROJECT_signingKey: ENCRYPTED[!54147bd7fb86bbe802fd432fab7d53bee19e71fe642d7b57703ec985b10f1976602adc743a906ea9851e5dd793be540c!]
+    ORG_GRADLE_PROJECT_signingPassword: ENCRYPTED[!15c41fa6fdc13ace4a011693a002664593e038f91a2597fad40f4295f0de9858a587c504f5b9f1f97250f19fd5f4a655!]
   <<: *SETUP_GRADLE_CACHE
   build_script:
     - source cirrus-env BUILD
