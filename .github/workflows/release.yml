@@ -61,7 +61,7 @@ jobs:
           echo ::set-output name=build::"${build}"
       - name: Create local repository directory
         id: local_repo
-        run: echo ::set-output name=dir::"$(mktemp -d -f repo.XXXXXXXX)"
+        run: echo ::set-output name=dir::"$(mktemp -d repo.XXXXXXXX)"
       - name: Download Artifacts
         id: jfrog
         env:
