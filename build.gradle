@@ -1,6 +1,7 @@
 plugins {
   id "com.jfrog.artifactory" version "4.21.0"
   id "org.sonarqube" version "3.1.1"
+  id 'signing'
 }
 
 // Analyze SonarQube with SonarQube!
@@ -26,6 +27,27 @@ allprojects {
     mavenCentral()
     maven {
       url System.env.'ARTIFACTORY_URL' + '/sonarsource'
+    }
+  }
+
+  signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    required {
+      def branch = System.getenv()["CIRRUS_BRANCH"]
+      return (branch == 'master' || branch ==~ 'branch-[\\d.]+') &&
+        gradle.taskGraph.hasTask("artifactoryPublish")
+    }
+    sign publishing.publications
+  }
+
+  tasks.withType(Sign) {
+    onlyIf {
+      def branch = System.getenv()["CIRRUS_BRANCH"]
+      return !artifactoryPublish.skip &&
+        (branch == 'master' || branch ==~ 'branch-[\\d.]+') &&
+        gradle.taskGraph.hasTask("artifactoryPublish")
     }
   }
 }
