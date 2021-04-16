@@ -13,24 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     name: Start release process
     steps:
-      - name: Checkout release action
-        uses: actions/checkout@v2
-        with:
-          repository: SonarSource/gh-action_LT_release
-
-      - name: LT release
-        id: lt_release
+      - name: Release
+        id: release
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        uses: SonarSource/gh-action_LT_release@master
-
+          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+          BURGRX_USER: ${{ secrets.BURGRX_USER }}
+          BURGRX_PASSWORD: ${{ secrets.BURGRX_PASSWORD }}
+          CIRRUS_TOKEN: ${{ secrets.CIRRUS_TOKEN }}
+          PATH_PREFIX: ${{ secrets.BINARIES_PATH_PREFIX }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          RELEASE_SSH_USER: ${{ secrets.RELEASE_SSH_USER }}
+          RELEASE_SSH_KEY: ${{ secrets.RELEASE_SSH_KEY }}
+          SLACK_API_TOKEN: ${{secrets.SLACK_API_TOKEN }}
+        uses: SonarSource/gh-action_release/main@v3
+        with:
+          publish_to_binaries: true
+          attach_artifacts_to_github_release: false
+          run_rules_cov: false
+          slack_channel: builders-guild
       - name: Release action results
         if: always()
         run: |
           echo "${{ steps.lt_release.outputs.releasability }}"
           echo "${{ steps.lt_release.outputs.release }}"
-
-      #slack notifications
+        #slack notifications
       - name: Notify success on Slack
         uses: Ilshidur/action-slack@2.0.0
         with:
@@ -40,3 +46,32 @@ jobs:
         if: failure()
         with:
           args: "Release failed, see the logs at https://github.com/{{ GITHUB_REPOSITORY }}/actions"
+
+  maven-central-sync:
+    runs-on: ubuntu-latest
+    needs:
+      - sonar_release
+    steps:
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v1
+      - name: Get the version
+        id: get_version
+        run: |
+          IFS=. read major minor patch build <<< "${{ github.event.release.tag_name }}"
+          echo ::set-output name=build::"${build}"
+      - name: Create local repository directory
+        id: local_repo
+        run: echo ::set-output name=dir::"$(mktemp -d -f repo.XXXXXXXX)"
+      - name: Download Artifacts
+        id: jfrog
+        env:
+          ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+        run: |
+          cd ${{ steps.local_repo.outputs.dir }} && jfrog rt download --url https://repox.jfrog.io/artifactory --apikey $ARTIFACTORY_API_KEY --fail-no-op --build "${{ github.event.repository.name }}/${{ steps.get_version.outputs.build }}" sonarsource-public-releases/
+      - name: Maven Central Sync
+        uses: SonarSource/gh-action_release/maven-central-sync@v3
+        with:
+          local-repo-dir: ${{ steps.local_repo.outputs.dir }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
