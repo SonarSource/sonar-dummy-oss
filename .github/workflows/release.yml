@@ -81,10 +81,10 @@ jobs:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       - name: Notify on failure
-        if: ${{ steps.maven-central-sync.outcome == 'failure' }}
+        if: ${{ failure() || steps.maven-central-sync.outcome == 'failure' }}
         uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
+          status: failure
           fields: repo,author,eventName
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BUILD_WEBHOOK }}
