@@ -32,6 +32,31 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
+      pom {
+        name = project.name
+        description = project.description
+        url = 'http://www.sonarsource.com/'
+        organization {
+          name = 'SonarSource'
+          url = 'http://www.sonarsource.com'
+        }
+        licenses {
+          license {
+            name = 'GNU LGPL 3'
+            url = 'http://www.gnu.org/licenses/lgpl.txt'
+            distribution = 'repo'
+          }
+        }
+        scm {
+          url = 'https://github.com/SonarSource/sonar-dummy-oss-plugin'
+        }
+        developers {
+          developer {
+            id = 'release-engineers'
+            name = 'SonarSource Release Engineers'
+          }
+        }
+      }
     }
   }
 }
