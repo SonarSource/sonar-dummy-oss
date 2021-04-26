@@ -50,8 +50,8 @@ build_task:
     SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
-    ORG_GRADLE_PROJECT_signingKey: ENCRYPTED[bf05d82ab259e75bea58bd3ae710120fc776c659a85f7b6de09b3e715180ff5b7e30a0ecadb117e4ce7c15344ef42202]
-    ORG_GRADLE_PROJECT_signingPassword: ENCRYPTED[837baaa5d2e6a12e71684d8b474b198a75f19ed98d5788f4e3521718917675e9850ff411443c7a657bffb2d44ed56e8b]
+    ORG_GRADLE_PROJECT_signingKey: ENCRYPTED[!cc216dfe592f79db8006f2a591f8f98b40aa2b078e92025623594976fd32f6864c1e6b6ba74b50647f608e2418e6c336!]
+    ORG_GRADLE_PROJECT_signingPassword: ENCRYPTED[!314a8fc344f45e462dd5e8dccd741d7562283a825e78ebca27d4ae9db8e65ce618e7f6aece386b2782a5abe5171467bd!]
     ORG_GRADLE_PROJECT_signingKeyId: 0x07513C45
   <<: *SETUP_GRADLE_CACHE
   build_script:
