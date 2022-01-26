@@ -74,7 +74,7 @@ subprojects {
   }
 
   license {
-    header = rootProject.file('LICENSE')
+    header = rootProject.file('HEADER')
     strictCheck true
     mapping {
       java = 'SLASHSTAR_STYLE'
