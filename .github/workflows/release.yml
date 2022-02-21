@@ -10,10 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     name: Start release process
     steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.BINARIES_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.BINARIES_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.BINARIES_AWS_REGION }}
       - name: Release
         id: release
+        with:
+          publish_to_binaries: true
+          slack_channel: test-github-action
         env:
           ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+          BINARIES_AWS_DEPLOY: ${{ secrets.BINARIES_AWS_DEPLOY }}
           BURGRX_USER: ${{ secrets.BURGRX_USER }}
           BURGRX_PASSWORD: ${{ secrets.BURGRX_PASSWORD }}
           CIRRUS_TOKEN: ${{ secrets.CIRRUS_TOKEN }}
@@ -21,11 +31,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
           RELEASE_SSH_USER: ${{ secrets.RELEASE_SSH_USER }}
           RELEASE_SSH_KEY: ${{ secrets.RELEASE_SSH_KEY }}
-          SLACK_API_TOKEN: ${{secrets.SLACK_API_TOKEN }}
-        uses: SonarSource/gh-action_release/main@4.0.1
-        with:
-          publish_to_binaries: true
-          slack_channel: builders-guild
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        uses: SonarSource/gh-action_release/main@4.1.0
       - name: Release action results
         if: always()
         run: |
