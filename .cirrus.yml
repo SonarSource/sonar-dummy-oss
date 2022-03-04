@@ -75,5 +75,5 @@ promote_task:
     ARTIFACTS: org.sonarsource.dummy:sonar-dummy-oss-plugin:jar
   script:
     - source cirrus-env PROMOTE
-    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST"
+    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST?multi=true"
     - burgr-notify-promotion
