@@ -4,7 +4,7 @@ description = 'SonarSource :: dummy :: Plugin'
 dependencies {
   testImplementation group: 'junit', name: 'junit', version:'4.11'
   testImplementation group: 'org.easytesting', name: 'fest-assert', version:'1.4'
-  compileOnly group: 'org.codehaus.sonar', name: 'sonar-plugin-api', version:'4.5.7'
+  compileOnly group: 'org.codehaus.sonar', name: 'sonar-plugin-api', version:'5.1'
 }
 
 jar {
