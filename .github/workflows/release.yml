@@ -32,7 +32,7 @@ jobs:
           RELEASABILITY_AWS_ACCESS_KEY_ID: ${{ secrets.RELEASABILITY_AWS_ACCESS_KEY_ID }}
           RELEASABILITY_AWS_SECRET_ACCESS_KEY: ${{ secrets.RELEASABILITY_AWS_SECRET_ACCESS_KEY }}
           RELEASABILITY_ENV_TYPE: Dev
-        uses: SonarSource/gh-action_release/main@4afd26f3ddbd73caa11d91296487e41a3f5360bd
+        uses: SonarSource/gh-action_release/main@fed26dc072fa55006db0d8f28d8d25b97f9f245a
         with:
           publish_to_binaries: true # Used only if the binaries is delivered to costumers
           slack_channel: build
@@ -61,14 +61,14 @@ jobs:
         id: local_repo
         run: echo ::set-output name=dir::"$(mktemp -d repo.XXXXXXXX)"
       - name: Download Artifacts
-        uses: SonarSource/gh-action_release/download-build@4afd26f3ddbd73caa11d91296487e41a3f5360bd
+        uses: SonarSource/gh-action_release/download-build@fed26dc072fa55006db0d8f28d8d25b97f9f245a
         with:
           build-number: ${{ steps.get_version.outputs.build }}
           local-repo-dir: ${{ steps.local_repo.outputs.dir }}
       - name: Maven Central Sync
         id: maven-central-sync
         continue-on-error: true
-        uses: SonarSource/gh-action_release/maven-central-sync@4afd26f3ddbd73caa11d91296487e41a3f5360bd
+        uses: SonarSource/gh-action_release/maven-central-sync@fed26dc072fa55006db0d8f28d8d25b97f9f245a
         with:
           local-repo-dir: ${{ steps.local_repo.outputs.dir }}
         env:
