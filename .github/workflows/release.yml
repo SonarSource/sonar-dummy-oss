@@ -9,6 +9,8 @@ jobs:
   release:
     name: Release
     uses: SonarSource/gh-action_release/.github/workflows/release-publish.yml@task/dav/build-1184-releasability
+    secrets:
+      artifactory-api-key: ${{ secrets.REPOX_CLI_CONFIG_PUBLIC_READER }}
   maven-central-sync:
     needs:
       - release
