@@ -21,6 +21,7 @@ jobs:
       binaries-aws-region: ${{ secrets.BINARIES_AWS_REGION }}
       releasability-aws-access-key-id: ${{ secrets.RELEASABILITY_AWS_ACCESS_KEY_ID }}
       releasability-aws-secret-access-key: ${{ secrets.RELEASABILITY_AWS_SECRET_ACCESS_KEY }}
+      test: 'TEST'
   maven-central-sync:
     needs:
       - release
