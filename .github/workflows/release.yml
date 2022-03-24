@@ -18,7 +18,7 @@ jobs:
           aws-region: ${{ secrets.BINARIES_AWS_REGION }}
       - name: Release
         id: release
-        uses: SonarSource/gh-action_release/main@021569a1f38cdef0471746fc3fc9ce274c31e7b2 # tag=4.2.2
+        uses: SonarSource/gh-action_release/main@branch-4 # v4 maintenance branch
         with:
           publish_to_binaries: true # Used only if the binaries is delivered to costumers
           slack_channel: build
