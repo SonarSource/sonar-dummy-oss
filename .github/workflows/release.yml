@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     name: Release
-    uses: SonarSource/gh-action_release/.github/workflows/release-publish.yml@task/dav/build-1184-releasability
+    uses: SonarSource/gh-action_release/.github/workflows/release-publish.yml@task/dav/build-1040-releasability-only
     with:
       slack_channel: build
     secrets:
@@ -25,7 +25,7 @@ jobs:
     needs:
       - release
     name: Maven Central Sync
-    uses: SonarSource/gh-action_release/.github/workflows/maven-central-sync.yml@task/dav/build-1184-releasability
+    uses: SonarSource/gh-action_release/.github/workflows/maven-central-sync.yml@task/dav/build-1040-releasability-only
     secrets:
       artifactory-cli-config-public-reader: ${{ secrets.REPOX_CLI_CONFIG_PUBLIC_READER }}
       sonatype-oss-hosting-username: ${{ secrets.OSSRH_USERNAME }}
