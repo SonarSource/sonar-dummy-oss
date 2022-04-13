@@ -40,6 +40,7 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_task:
   gke_container:
+    <<: *ONLY_SONARSOURCE_QA
     <<: *CONTAINER_DEFINITION
     cpu: 2
     memory: 2G
