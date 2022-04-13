@@ -23,7 +23,7 @@ container_definition: &CONTAINER_DEFINITION
   namespace: default
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
-  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
+  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
 setup_gradle_cache_template: &SETUP_GRADLE_CACHE
   gradle_cache:
@@ -56,7 +56,6 @@ build_task:
     ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
   <<: *SETUP_GRADLE_CACHE
   build_script:
-    - env
     - source cirrus-env BUILD
     - regular_gradle_build_deploy_analyze
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
