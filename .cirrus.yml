@@ -39,8 +39,8 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
     - rm -rf "${GRADLE_USER_HOME}/caches/build-cache-1/"
 
 build_task:
+  <<: *ONLY_SONARSOURCE_QA
   gke_container:
-    <<: *ONLY_SONARSOURCE_QA
     <<: *CONTAINER_DEFINITION
     cpu: 2
     memory: 2G
@@ -61,9 +61,9 @@ build_task:
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
  
 promote_task:
+  <<: *ONLY_SONARSOURCE_QA
   depends_on:
     - build
-  <<: *ONLY_SONARSOURCE_QA
   gke_container:
     <<: *CONTAINER_DEFINITION
     cpu: 0.5
