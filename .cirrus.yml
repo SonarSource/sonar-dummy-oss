@@ -1,4 +1,4 @@
-gcp_credentials: ENCRYPTED[!17c59813193e86cc337bce848b358412b90f50bc5fe1b8b39d363cdf14a41ebe76cfba0482e7f81d076994b9f6dbfb4c!]
+gcp_credentials: ENCRYPTED[!149d4005ecdba4cdd78bb5ba22756ebb98bf8e3367ee2e9ab08c5a1608c0d3e3b501904b67a1d67c0b63085e469d7dde!]
  
 env:
   CIRRUS_CLONE_DEPTH: 20
@@ -17,9 +17,9 @@ env:
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
 container_definition: &CONTAINER_DEFINITION
-  image: gcr.io/language-team/base:latest
-  cluster_name: cirrus-ci-lt-cluster
-  zone: us-central1-a
+  image: eu.gcr.io/release-engineering-ci-prod/base:j11-g7-latest
+  cluster_name: cirrus-ci
+  zone: europe-west4-b
   namespace: default
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
