@@ -38,6 +38,10 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
     - rm -rf "${GRADLE_USER_HOME}/caches/journal-1/"
     - rm -rf "${GRADLE_USER_HOME}/caches/build-cache-1/"
 
+plugin_cache_template: &SETUP_PLUGIN_CACHE
+  plugin_cache:
+     folder: ./sonar-dummy-oss-plugin/build/libs
+
 build_task:
   <<: *ONLY_SONARSOURCE_QA
   gke_container:
@@ -55,7 +59,21 @@ build_task:
     ORG_GRADLE_PROJECT_signingPassword: ENCRYPTED[!314a8fc344f45e462dd5e8dccd741d7562283a825e78ebca27d4ae9db8e65ce618e7f6aece386b2782a5abe5171467bd!]
     ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
   <<: *SETUP_GRADLE_CACHE
+  <<: *SETUP_PLUGIN_CACHE
   build_script:
     - source cirrus-env BUILD
     - regular_gradle_build_deploy_analyze
+    - ls -l ./sonar-dummy-oss-plugin/build/libs
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+
+test_task:
+  depends_on:
+    - build
+  <<: *ONLY_SONARSOURCE_QA
+  gke_container:
+    <<: *CONTAINER_DEFINITION
+    cpu: 2
+    memory: 2G
+  <<: *SETUP_PLUGIN_CACHE
+  test_script:
+    - ls -l ./sonar-dummy-oss-plugin/build/libs
