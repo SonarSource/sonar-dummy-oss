@@ -58,4 +58,21 @@ build_task:
   build_script:
     - source cirrus-env BUILD
     - regular_gradle_build_deploy_analyze
+    - ls -lh ./sonar-dummy-oss-plugin/build/libs
+    - cd sonar-dummy-oss-plugin/build/libs && FILENAME=$(ls sonar-dummy-oss-plugin-2.5.0.${BUILD_NUMBER}.jar)
+    - curl -s -X POST --data-binary @${FILENAME} http://$CIRRUS_HTTP_CACHE_HOST/${FILENAME}
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+
+test_task:
+  depends_on:
+    - build
+  <<: *ONLY_SONARSOURCE_QA
+  gke_container:
+    <<: *CONTAINER_DEFINITION
+    cpu: 2
+    memory: 2G
+  test_script:
+    - source cirrus-env TEST
+    - FILENAME=sonar-dummy-oss-plugin-2.5.0.${BUILD_NUMBER}.jar
+    - curl -O http://$CIRRUS_HTTP_CACHE_HOST/${FILENAME}
+    - ls -lh ${FILENAME}
