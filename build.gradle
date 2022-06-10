@@ -28,9 +28,6 @@ allprojects {
   repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-      url System.env.'ARTIFACTORY_URL' + '/sonarsource'
-    }
   }
 
   signing {
