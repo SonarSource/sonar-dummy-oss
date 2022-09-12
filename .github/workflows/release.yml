@@ -1,110 +1,22 @@
+---
 name: sonar-release
-
+# This workflow is triggered when publishing a new github release
+# yamllint disable-line rule:truthy
 on:
   release:
     types:
       - published
+  workflow_dispatch:
+
+env:
+  PYTHONUNBUFFERED: 1
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-    name: Release
     permissions:
       id-token: write
-      contents: read
-    env:
-      VAULT_ADDR: https://vault.sonar.build:8200
-    steps:
-      - name: Vault Secrets
-        id: secrets
-        uses: hashicorp/vault-action@7d98524254c38dc6892804f991526ff30905f643 # tag=v2.4.2
-        with:
-          url: ${{ env.VAULT_ADDR }}
-          exportEnv: false
-          method: jwt
-          path: jwt-ghwf
-          role: github-sonarsource-sonar-dummy-oss
-          secrets: |
-            development/artifactory/token/SonarSource-sonar-dummy-oss-private-reader access_token  | artifactory_access_token;
-            development/kv/data/slack token | slack_api_token;
-            development/kv/data/repox url | artifactory_url;
-            development/kv/data/burgr github_username | burgrx_username;
-            development/kv/data/burgr github_password | burgrx_password;
-            development/aws/sts/downloads access_key | binaries_aws_access_key_id;
-            development/aws/sts/downloads secret_key | binaries_aws_secret_access_key;
-            development/aws/sts/downloads security_token | binaries_aws_security_token;
-      - name: Release
-        id: release
-        uses: SonarSource/gh-action_release/main@e9c6a6497a596affde9b8a0f6c177a60ca727f58 # tag=4.2.6
-        with:
-          publish_to_binaries: true # Used only if the binaries is delivered to costumers
-          slack_channel: build
-        env:
-          ARTIFACTORY_API_KEY: ${{ steps.secrets.outputs.artifactory_access_token }}
-          BINARIES_AWS_DEPLOY: downloads-cdn-eu-central-1-prod # Required for pushing the binaries
-          BURGRX_USER: ${{ steps.secrets.outputs.burgrx_username }}
-          BURGRX_PASSWORD: ${{ steps.secrets.outputs.burgrx_password }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SLACK_API_TOKEN: ${{steps.secrets.outputs.slack_api_token }}
-          AWS_ACCESS_KEY_ID: ${{ steps.secrets.outputs.binaries_aws_access_key_id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.secrets.outputs.binaries_aws_secret_access_key }}
-          AWS_SESSION_TOKEN: ${{ steps.secrets.outputs.binaries_aws_security_token }}
-          AWS_DEFAULT_REGION: eu-central-1
-      - name: Release action results
-        if: always()
-        run: |
-          echo "${{ steps.release.outputs.releasability }}"
-          echo "${{ steps.release.outputs.promote }}"
-          echo "${{ steps.release.outputs.publish_to_binaries }}"
-          echo "${{ steps.release.outputs.release }}"
-
-  maven-central-sync: # Only required for OSS projects
-    runs-on: ubuntu-latest
-    name: Maven Central Sync
-    permissions:
-      id-token: write
-      contents: read
-    needs:
-      - release
-    steps:
-      - name: Vault Secrets
-        id: secrets
-        uses: hashicorp/vault-action@7d98524254c38dc6892804f991526ff30905f643 # tag=v2.4.2
-        with:
-          url: ${{ env.VAULT_ADDR }}
-          exportEnv: false
-          method: jwt
-          path: jwt-ghwf
-          role: github-sonarsource-sonar-dummy-oss
-          secrets: |
-            development/artifactory/token access_token  | jf_access_token;
-            development/kv/data/repox url | jf_url;
-            development/kv/data/ossrh username | ossrh_username;
-            development/kv/data/ossrh password | ossrh_password;
-      - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@11ee3f9bb82595485cb55670e4f93885080e183b # tag=v2.4.1
-        env:
-          JF_URL: ${{ steps.secrets.outputs.jf_url }}
-          JF_ACCESS_TOKEN: ${{ steps.secrets.outputs.jf_access_token }}
-      - name: Get the version
-        id: get_version
-        run: |
-          IFS=. read major minor patch build <<< "${{ github.event.release.tag_name }}"
-          echo ::set-output name=build::"${build}"
-      - name: Create local repository directory
-        id: local_repo
-        run: echo ::set-output name=dir::"$(mktemp -d repo.XXXXXXXX)"
-      - name: Download Artifacts
-        uses: SonarSource/gh-action_release/download-build@e9c6a6497a596affde9b8a0f6c177a60ca727f58 # tag=4.2.6
-        with:
-          build-number: ${{ steps.get_version.outputs.build }}
-          local-repo-dir: ${{ steps.local_repo.outputs.dir }}
-      - name: Maven Central Sync
-        id: maven-central-sync
-        continue-on-error: true
-        uses: SonarSource/gh-action_release/maven-central-sync@e9c6a6497a596affde9b8a0f6c177a60ca727f58 # tag=4.2.6
-        with:
-          local-repo-dir: ${{ steps.local_repo.outputs.dir }}
-        env:
-          OSSRH_USERNAME: ${{ steps.secrets.ossrh_username }}
-          OSSRH_PASSWORD: ${{ steps.secrets.ossrh_password }}
+      contents: write
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@v5
+    with:
+      publishToBinaries: true
+      mavenCentralSync: true

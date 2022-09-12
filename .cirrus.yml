@@ -1,5 +1,5 @@
 gcp_credentials: ENCRYPTED[!149d4005ecdba4cdd78bb5ba22756ebb98bf8e3367ee2e9ab08c5a1608c0d3e3b501904b67a1d67c0b63085e469d7dde!]
- 
+
 env:
   CIRRUS_CLONE_DEPTH: 20
   #Possible values for ARTIFACTORY_DEPLOY_REPO: sonarsource-private-qa, sonarsource-public-qa
@@ -15,11 +15,14 @@ container_definition: &CONTAINER_DEFINITION
   namespace: default
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
-  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
+  only_if: >
+    $CIRRUS_USER_COLLABORATOR == 'true' &&
+    $CIRRUS_TAG == "" &&
+    ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
 setup_gradle_cache_template: &SETUP_GRADLE_CACHE
   gradle_cache:
-     folder: .gradle/caches
+    folder: .gradle/caches
   create_gradle_directory_script:
     - mkdir -p "${GRADLE_USER_HOME}"
 
@@ -44,7 +47,7 @@ build_task:
     # analysis on next
     SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
     #allow deployment of pull request artifacts to repox
-    DEPLOY_PULL_REQUEST: true    
+    DEPLOY_PULL_REQUEST: true
     ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
   <<: *SETUP_GRADLE_CACHE
   <<: *VAULT
@@ -55,7 +58,7 @@ build_task:
     - export ORG_GRADLE_PROJECT_signingPassword=${PGP_PASSPHRASE}
     - regular_gradle_build_deploy_analyze
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
- 
+
 promote_task:
   <<: *ONLY_SONARSOURCE_QA
   depends_on:

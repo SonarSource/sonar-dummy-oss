@@ -30,7 +30,7 @@ public final class DummyPlugin extends SonarPlugin {
     return Lists.newArrayList();
   }
 
-  
+
   public String sayHello() {
     System.out.println("hello");
     return "hello";
