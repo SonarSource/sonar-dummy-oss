@@ -25,14 +25,14 @@ jobs:
           path: jwt-ghwf
           role: github-sonarsource-sonar-dummy-oss
           secrets: |
-          development/artifactory/token access_token  | artifactory_access_token;
-          development/kv/data/slack token | slack_api_token;
-          development/kv/data/repox url | artifactory_url;
-          development/kv/data/burgr username | burgrx_username;
-          development/kv/data/burgr password | burgerx_password;
-          development/aws/sts/downloads access_key | binaries_aws_access_key_id;
-          development/aws/sts/downloads secret_key | binaries_aws_secret_access_key;
-          development/aws/sts/downloads security_token | binaries_aws_security_token;
+            development/artifactory/token access_token  | artifactory_access_token;
+            development/kv/data/slack token | slack_api_token;
+            development/kv/data/repox url | artifactory_url;
+            development/kv/data/burgr username | burgrx_username;
+            development/kv/data/burgr password | burgerx_password;
+            development/aws/sts/downloads access_key | binaries_aws_access_key_id;
+            development/aws/sts/downloads secret_key | binaries_aws_secret_access_key;
+            development/aws/sts/downloads security_token | binaries_aws_security_token;
       - name: Release
         id: release
         uses: SonarSource/gh-action_release/main@e9c6a6497a596affde9b8a0f6c177a60ca727f58 # tag=4.2.6
@@ -77,13 +77,13 @@ jobs:
           path: jwt-ghwf
           role: github-sonarsource-sonar-dummy-oss
           secrets: |
-          development/artifactory/token access_token  | jf_access_token;
-          development/kv/data/repox url | jf_url;
-          development/kv/data/ossrg username | ossrh_username;
-          development/kv/data/ossrg password | ossrh_password;
+            development/artifactory/token access_token  | jf_access_token;
+            development/kv/data/repox url | jf_url;
+            development/kv/data/ossrg username | ossrh_username;
+            development/kv/data/ossrg password | ossrh_password;
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@11ee3f9bb82595485cb55670e4f93885080e183b # tag=v2.4.1
-        env:          
+        env:
           JF_URL: ${{ steps.secrets.outputs.jf_url }}
           JF_ACCESS_TOKEN: ${{ steps.secrets.outputs.jf_access_token }}
       - name: Get the version
@@ -108,4 +108,3 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ steps.secrets.ossrh_username }}
           OSSRH_PASSWORD: ${{ steps.secrets.ossrh_password }}
-
