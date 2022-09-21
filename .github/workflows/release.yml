@@ -25,7 +25,7 @@ jobs:
           path: jwt-ghwf
           role: github-sonarsource-sonar-dummy-oss
           secrets: |
-            development/artifactory/token access_token  | artifactory_access_token;
+            development/artifactory/token/SonarSource-sonar-dummy-oss-private-reader access_token  | artifactory_access_token;
             development/kv/data/slack token | slack_api_token;
             development/kv/data/repox url | artifactory_url;
             development/kv/data/burgr username | burgrx_username;
