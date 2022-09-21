@@ -79,8 +79,8 @@ jobs:
           secrets: |
             development/artifactory/token access_token  | jf_access_token;
             development/kv/data/repox url | jf_url;
-            development/kv/data/ossrg username | ossrh_username;
-            development/kv/data/ossrg password | ossrh_password;
+            development/kv/data/ossrh username | ossrh_username;
+            development/kv/data/ossrh password | ossrh_password;
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@11ee3f9bb82595485cb55670e4f93885080e183b # tag=v2.4.1
         env:
