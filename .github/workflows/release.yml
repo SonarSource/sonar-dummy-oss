@@ -28,8 +28,8 @@ jobs:
             development/artifactory/token/SonarSource-sonar-dummy-oss-private-reader access_token  | artifactory_access_token;
             development/kv/data/slack token | slack_api_token;
             development/kv/data/repox url | artifactory_url;
-            development/kv/data/burgr username | burgrx_username;
-            development/kv/data/burgr password | burgerx_password;
+            development/kv/data/burgr github_username | burgrx_username;
+            development/kv/data/burgr github_password | burgrx_password;
             development/aws/sts/downloads access_key | binaries_aws_access_key_id;
             development/aws/sts/downloads secret_key | binaries_aws_secret_access_key;
             development/aws/sts/downloads security_token | binaries_aws_security_token;
@@ -43,7 +43,7 @@ jobs:
           ARTIFACTORY_API_KEY: ${{ steps.secrets.outputs.artifactory_access_token }}
           BINARIES_AWS_DEPLOY: downloads-cdn-eu-central-1-prod # Required for pushing the binaries
           BURGRX_USER: ${{ steps.secrets.outputs.burgrx_username }}
-          BURGRX_PASSWORD: ${{ steps.secrets.outputs.burgerx_password }}
+          BURGRX_PASSWORD: ${{ steps.secrets.outputs.burgrx_password }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_API_TOKEN: ${{steps.secrets.outputs.slack_api_token }}
           AWS_ACCESS_KEY_ID: ${{ steps.secrets.outputs.binaries_aws_access_key_id }}
