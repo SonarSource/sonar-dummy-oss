@@ -1,1 +1,1 @@
-# sonar-dummy
+# sonar-dummy-oss
