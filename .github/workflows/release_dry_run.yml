@@ -1,22 +1,17 @@
----
-name: sonar-release
-# This workflow is triggered when publishing a new github release
-# yamllint disable-line rule:truthy
+name: sonar-release (dry-run)
 on:
   release:
     types:
       - published
   workflow_dispatch:
 
-env:
-  PYTHONUNBUFFERED: 1
-
 jobs:
-  release:
+  dry_run:
     permissions:
       id-token: write
       contents: write
     uses: SonarSource/gh-action_release/.github/workflows/main.yaml@c3680b0928d179cc5ae56d575c726608bf47984f # feature/svermeille/BUILD-2509-Dry-run-option-for-gh-action_release
     with:
+      dryRun: true
       publishToBinaries: true
       mavenCentralSync: true
