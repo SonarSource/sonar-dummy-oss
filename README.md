@@ -1,3 +1,3 @@
 # sonar-dummy-oss
 
-A sample project
+A sample project.
