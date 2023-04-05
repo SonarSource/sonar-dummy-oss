@@ -10,7 +10,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@feature/svermeille/BUILD-2509-Dry-run-option-for-gh-action_release # feature/svermeille/BUILD-2509-Dry-run-option-for-gh-action_release
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@8535ac239486e025aed018cc93268b8bf86b202f # tag=5.0.4
     with:
       dryRun: true
       publishToBinaries: true
