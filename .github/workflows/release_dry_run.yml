@@ -10,7 +10,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@feature/svermeille/BUILD-2699-do-not-use-deprecated-set-output # custom branch used for testing purpose
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@v5
     with:
       dryRun: true
       publishToBinaries: true
