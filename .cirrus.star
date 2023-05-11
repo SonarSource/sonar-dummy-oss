@@ -1,4 +1,4 @@
-load("github.com/SonarSource/cirrus-modules@6b49869adbb4d72ea884c34bf01a004cbddd5314", "load_features") # tag=2.0.3
+load("github.com/SonarSource/cirrus-modules@v2", "load_features")
 
 def main(ctx):
   return load_features(ctx)
