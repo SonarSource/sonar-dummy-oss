@@ -2,6 +2,7 @@ env:
   CIRRUS_CLONE_DEPTH: 20
   #Possible values for ARTIFACTORY_DEPLOY_REPO: sonarsource-private-qa, sonarsource-public-qa
   ARTIFACTORY_PRIVATE_USERNAME: vault-sonarsource-sonar-dummy-oss-private-reader
+  ARTIFACTORY_PRIVATE_PASSWORD: VAULT[development/artifactory/token/sonarsource-sonar-dummy-oss-private-reader access_token]
   ARTIFACTORY_DEPLOY_USERNAME: vault-sonarsource-sonar-dummy-oss-qa-deployer
   ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
@@ -11,25 +12,6 @@ container_definition: &CONTAINER_DEFINITION
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
   namespace: default
-
-only_sonarsource_qa: &ONLY_SONARSOURCE_QA
-  only_if: >
-    $CIRRUS_USER_COLLABORATOR == 'true' &&
-    $CIRRUS_TAG == "" &&
-    ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
-
-setup_gradle_cache_template: &SETUP_GRADLE_CACHE
-  gradle_cache:
-    folder: .gradle/caches
-  create_gradle_directory_script:
-    - mkdir -p "${GRADLE_USER_HOME}"
-
-cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
-  cleanup_gradle_script:
-    - /usr/bin/find "${GRADLE_USER_HOME}/caches/" -name "*.lock" -type f -delete
-    - rm -rf "${GRADLE_USER_HOME}/caches/4.10.2/"
-    - rm -rf "${GRADLE_USER_HOME}/caches/journal-1/"
-    - rm -rf "${GRADLE_USER_HOME}/caches/build-cache-1/"
 
 vault: &VAULT
   vault_script:
@@ -47,29 +29,10 @@ build_task:
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
     ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
-  <<: *SETUP_GRADLE_CACHE
+    PROMOTE_URL: VAULT[development/kv/data/promote data.url]
+    ARTIFACTORY_URL: VAULT[development/kv/data/repox data.url]
+  echo_script:
+    - echo $PROMOTE_URL $ARTIFACTORY_URL
   <<: *VAULT
   build_script:
     - source cirrus-env BUILD
-    #read the sign key to memory
-    - export ORG_GRADLE_PROJECT_signingKey=$(cat ~/.m2/sign-key.asc)
-    - export ORG_GRADLE_PROJECT_signingPassword=${PGP_PASSPHRASE}
-    - regular_gradle_build_deploy_analyze
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
-
-promote_task:
-  <<: *ONLY_SONARSOURCE_QA
-  depends_on:
-    - build
-  eks_container:
-    <<: *CONTAINER_DEFINITION
-    cpu: 0.5
-    memory: 500M
-  env:
-    #artifacts that will have downloadable links in burgr
-    ARTIFACTS: org.sonarsource.dummy:sonar-dummy-oss-plugin:jar
-  <<: *VAULT
-  script:
-    - source cirrus-env PROMOTE
-    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST"
-    - burgr-notify-promotion
