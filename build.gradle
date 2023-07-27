@@ -3,7 +3,7 @@ plugins {
   id "com.jfrog.artifactory" version "4.26.1"
   id "org.sonarqube" version "3.4.0.2513"
   id 'signing'
-  // id "org.cyclonedx.bom" version "1.5.0"
+  id "org.cyclonedx.bom" version "1.5.0"
 }
 
 // Analyze with SonarQube!
@@ -17,7 +17,7 @@ sonarqube {
 allprojects {
   apply plugin: 'com.jfrog.artifactory'
   apply plugin: 'maven-publish'
-  // apply plugin: "org.cyclonedx.bom"
+  apply plugin: "org.cyclonedx.bom"
 
   // Replaces the version defined in sources, usually x.y-SNAPSHOT, by a version identifying the build.
   def buildNumber = System.getProperty("buildNumber")
@@ -84,22 +84,22 @@ subprojects {
     includes(['**/*.java'])
   }
 
-  // def bomFile = layout.buildDirectory.file('reports/bom.json')
-  // cyclonedxBom {
-  //   outputs.file bomFile
-  // }
-  // def bomArtifact = artifacts.add('archives', bomFile.get().asFile) {
-  //   type 'json'
-  //   classifier 'cyclonedx'
-  //   builtBy 'cyclonedxBom'
-  // }
-  // publishing {
-  //   publications {
-  //     mavenJava(MavenPublication) {
-  //       artifact bomArtifact
-  //     }
-  //   }
-  // }
+  def bomFile = layout.buildDirectory.file('reports/bom.json')
+  cyclonedxBom {
+    outputs.file bomFile
+  }
+  def bomArtifact = artifacts.add('archives', bomFile.get().asFile) {
+    type 'json'
+    classifier 'cyclonedx'
+    builtBy 'cyclonedxBom'
+  }
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        artifact bomArtifact
+      }
+    }
+  }
 }
 
 artifactory {
