@@ -1,12 +1,20 @@
 env:
-  CIRRUS_CLONE_DEPTH: 20
-  #Possible values for ARTIFACTORY_DEPLOY_REPO: sonarsource-private-qa, sonarsource-public-qa
-  ARTIFACTORY_PRIVATE_USERNAME: vault-sonarsource-sonar-dummy-oss-private-reader
-  ARTIFACTORY_DEPLOY_USERNAME: vault-sonarsource-sonar-dummy-oss-qa-deployer
-  ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
+  CIRRUS_CLONE_DEPTH: "20"
+  # Use bash (instead of sh on linux or cmd.exe on Windows)
+  CIRRUS_SHELL: bash
+
+  ARTIFACTORY_URL: VAULT[development/kv/data/repox data.url]
+  ARTIFACTORY_PRIVATE_USERNAME: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader username]
+  ARTIFACTORY_PRIVATE_PASSWORD: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader access_token]
+
+  # burgr notification
+  BURGR_URL: VAULT[development/kv/data/burgr data.url]
+  BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
+  BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
+
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
-container_definition: &CONTAINER_DEFINITION
+eks_container: &CONTAINER_DEFINITION
   image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j11-g7-latest
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
@@ -31,10 +39,6 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
     - rm -rf "${GRADLE_USER_HOME}/caches/journal-1/"
     - rm -rf "${GRADLE_USER_HOME}/caches/build-cache-1/"
 
-vault: &VAULT
-  vault_script:
-    - vault.sh
-
 build_task:
   <<: *ONLY_SONARSOURCE_QA
   eks_container:
@@ -42,18 +46,23 @@ build_task:
     cpu: 2
     memory: 2G
   env:
-    # analysis on next
-    SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
+    # Possible values for ARTIFACTORY_DEPLOY_REPO: sonarsource-private-qa, sonarsource-public-qa
+    ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
+    ARTIFACTORY_DEPLOY_USERNAME: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-qa-deployer username]
+    ARTIFACTORY_DEPLOY_PASSWORD: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-qa-deployer access_token]
     #allow deployment of pull request artifacts to repox
-    DEPLOY_PULL_REQUEST: true
-    ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
+    DEPLOY_PULL_REQUEST: "true"
+
+    # analysis on next
+    SONAR_HOST_URL: VAULT[development/kv/data/next data.url]
+    SONAR_TOKEN: VAULT[development/kv/data/next data.token]
+
+    ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
+    ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
+    ORG_GRADLE_PROJECT_signingKeyId: VAULT[development/kv/data/sign data.key_id]
   <<: *SETUP_GRADLE_CACHE
-  <<: *VAULT
   build_script:
     - source cirrus-env BUILD
-    #read the sign key to memory
-    - export ORG_GRADLE_PROJECT_signingKey=$(cat ~/.m2/sign-key.asc)
-    - export ORG_GRADLE_PROJECT_signingPassword=${PGP_PASSPHRASE}
     - regular_gradle_build_deploy_analyze
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
@@ -66,9 +75,11 @@ promote_task:
     cpu: 0.5
     memory: 500M
   env:
+    #promotion cloud function
+    GCF_ACCESS_TOKEN: VAULT[development/kv/data/promote data.token]
+    PROMOTE_URL: VAULT[development/kv/data/promote data.url]
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.dummy:sonar-dummy-oss-plugin:jar
-  <<: *VAULT
   script:
     - source cirrus-env PROMOTE
     - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST"
