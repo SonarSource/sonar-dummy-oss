@@ -16,7 +16,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@bug/dav/s3_delete
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@bf9a2eaea12432549a6c5ae57b6d4d6d33776fa3 # 5.0.13
     with:
       publishToBinaries: true
       mavenCentralSync: true
