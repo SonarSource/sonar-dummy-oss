@@ -22,7 +22,6 @@ eks_container: &CONTAINER_DEFINITION
 
 only_sonarsource_qa: &ONLY_SONARSOURCE_QA
   only_if: >
-    $CIRRUS_USER_COLLABORATOR == 'true' &&
     $CIRRUS_TAG == "" &&
     ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
