@@ -15,16 +15,10 @@ env:
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
 eks_container: &CONTAINER_DEFINITION
-  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j11-g7-latest
+  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base-pr-375:j11-g7-latest
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
   namespace: default
-
-only_sonarsource_qa: &ONLY_SONARSOURCE_QA
-  only_if: >
-    $CIRRUS_USER_COLLABORATOR == 'true' &&
-    $CIRRUS_TAG == "" &&
-    ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
 setup_gradle_cache_template: &SETUP_GRADLE_CACHE
   gradle_cache:
@@ -40,7 +34,6 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
     - rm -rf "${GRADLE_USER_HOME}/caches/build-cache-1/"
 
 build_task:
-  <<: *ONLY_SONARSOURCE_QA
   eks_container:
     <<: *CONTAINER_DEFINITION
     cpu: 2
@@ -67,7 +60,6 @@ build_task:
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 promote_task:
-  <<: *ONLY_SONARSOURCE_QA
   depends_on:
     - build
   eks_container:
@@ -75,12 +67,19 @@ promote_task:
     cpu: 0.5
     memory: 500M
   env:
-    #promotion cloud function
-    GCF_ACCESS_TOKEN: VAULT[development/kv/data/promote data.token]
-    PROMOTE_URL: VAULT[development/kv/data/promote data.url]
+    ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.dummy:sonar-dummy-oss-plugin:jar
-  script:
-    - source cirrus-env PROMOTE
-    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST"
-    - burgr-notify-promotion
+  script: |
+    if [[ -n $CIRRUS_PR ]]; then
+      export ARTIFACTORY_TARGET=${ARTIFACTORY_DEPLOY_REPO/%qa/dev}
+      export STATUS='it-passed-pr'
+    elif [[ "$CIRRUS_BRANCH" == $CIRRUS_DEFAULT_BRANCH ]] || [[ "$CIRRUS_BRANCH" =~ branch-.* ]]; then
+      export ARTIFACTORY_TARGET=${ARTIFACTORY_DEPLOY_REPO/%qa/builds}
+    elif [[ "$CIRRUS_BRANCH" =~ dogfood-on-.* ]]; then
+      export ARTIFACTORY_TARGET=sonarsource-dogfood-builds
+    fi
+    source cirrus-env PROMOTE
+    export PATH=/usr/local/bin/includes:$PATH
+    ARTIFACTORY_URL=https://repox.jfrog.io jfrog_promote
+    burgr-notify-promotion
