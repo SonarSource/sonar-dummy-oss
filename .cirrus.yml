@@ -71,15 +71,6 @@ promote_task:
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: org.sonarsource.dummy:sonar-dummy-oss-plugin:jar
   script: |
-    if [[ -n $CIRRUS_PR ]]; then
-      export ARTIFACTORY_TARGET=${ARTIFACTORY_DEPLOY_REPO/%qa/dev}
-      export STATUS='it-passed-pr'
-    elif [[ "$CIRRUS_BRANCH" == $CIRRUS_DEFAULT_BRANCH ]] || [[ "$CIRRUS_BRANCH" =~ branch-.* ]]; then
-      export ARTIFACTORY_TARGET=${ARTIFACTORY_DEPLOY_REPO/%qa/builds}
-    elif [[ "$CIRRUS_BRANCH" =~ dogfood-on-.* ]]; then
-      export ARTIFACTORY_TARGET=sonarsource-dogfood-builds
-    fi
     source cirrus-env PROMOTE
-    export PATH=/usr/local/bin/includes:$PATH
-    ARTIFACTORY_URL=https://repox.jfrog.io jfrog_promote
+    cirrus_jfrog_promote
     burgr-notify-promotion
