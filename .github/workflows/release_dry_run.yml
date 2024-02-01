@@ -13,6 +13,5 @@ jobs:
     uses: SonarSource/gh-action_release/.github/workflows/main.yaml@5.1.5
     with:
       dryRun: true
-      publishJavadoc: true
       publishToBinaries: true
       mavenCentralSync: true
