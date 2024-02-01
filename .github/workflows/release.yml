@@ -16,7 +16,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@feature/svermeille/BUILD-4036-Automate-javadoc-deployment
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@5.1.5
     with:
       publishToBinaries: true
       publishJavadoc: true
