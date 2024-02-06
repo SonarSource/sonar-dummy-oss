@@ -22,3 +22,4 @@ jobs:
       mavenCentralSync: true
       slackChannel: team-release-engineering-notifs
       publishJavadoc: true
+      javadocDestinationDirectory: sonar-dummy-oss
