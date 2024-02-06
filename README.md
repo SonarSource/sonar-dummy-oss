@@ -1,6 +1,6 @@
 # sonar-dummy-oss
 
-A sample project used for testing purpose..
+A sample project used for testing purpose.
 
 This project use **gradle** and **is published on maven central**.
 
