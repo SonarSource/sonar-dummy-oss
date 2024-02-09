@@ -5,7 +5,7 @@
   ],
   "packageRules": [
     {
-      "matchLanguages": [
+      "matchCategories": [
         "java"
       ],
       "enabled": false
