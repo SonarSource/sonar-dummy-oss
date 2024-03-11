@@ -16,7 +16,8 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@95eaa42a649490e6236043bbacbe5e90fccc054f # 5.2.0
+    #uses: SonarSource/gh-action_release/.github/workflows/main.yaml@95eaa42a649490e6236043bbacbe5e90fccc054f # 5.2.0
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@fix/svermeille/BUILD-4644-gh-action_release-5.2.0-do-not-download-all-files-anymore # test hotfix
     with:
       publishToBinaries: true
       mavenCentralSync: true
