@@ -1,8 +1,8 @@
 # sonar-dummy-oss
 
-A sample project used for testing purpose
+A sample project used for testing purpose.
 
-This project use **gradle** and **is published on maven central**.
+This project uses **gradle** and **is published on maven central**.
 
 Javadoc is automatically deployed [here](https://javadocs.sonarsource.org/?prefix=sonar-dummy-oss/)
 when project is released.
