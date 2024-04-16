@@ -1,15 +1,10 @@
----
-name: sonar-release
-# This workflow is triggered when publishing a new github release
-# yamllint disable-line rule:truthy
+name: Release
+
+# Trigger when publishing a new GitHub release
 on:
   release:
     types:
       - published
-  workflow_dispatch:
-
-env:
-  PYTHONUNBUFFERED: 1
 
 jobs:
   release:
