@@ -11,5 +11,4 @@ tab_width = 2
 
 # 4 space indentation
 [*.{py,star}]
-indent_style = space
 indent_size = 4
