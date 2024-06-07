@@ -11,7 +11,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@9e81903b12dd2512d584b958e895808b284b67d2 # 5.7.0
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@6b456461dd52b0db75076f83be203ac9162600c8 # 5.7.1
     with:
       publishToBinaries: true
       mavenCentralSync: true
