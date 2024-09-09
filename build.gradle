@@ -126,7 +126,6 @@ artifactory {
       publishPom = true
       publishIvy = false
     }
-    clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_PUBLISH', 'org.sonarsource.dummy:sonar-dummy-oss-plugin:jar,org.sonarsource.dummy:sonar-dummy-oss-plugin:json:cyclonedx')
   }
 
   clientConfig.info.setBuildName('sonar-dummy-oss')
