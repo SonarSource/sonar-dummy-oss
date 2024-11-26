@@ -1,2 +1,22 @@
+plugins {
+  id "com.gradle.develocity" version "3.18.2"
+}
+
+def isCI = System.getenv('CI') != null
+
+develocity {
+  server = "https://develocity.sonar.build"
+}
+
+buildCache {
+  local {
+    enabled = !isCI
+  }
+  remote(develocity.buildCache) {
+    enabled = true
+    push = isCI
+  }
+}
+
 rootProject.name = 'sonar-dummy-oss'
 include ':sonar-dummy-oss-plugin'
