@@ -11,6 +11,7 @@ env:
 
   DEVELOCITY_TOKEN: VAULT[development/kv/data/develocity data.token]
   DEVELOCITY_ACCESS_KEY: develocity.sonar.build=${DEVELOCITY_TOKEN}
+  ORG_GRADLE_PROJECT_testProperty: testValue
 
 eks_container: &CONTAINER_DEFINITION
   image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
