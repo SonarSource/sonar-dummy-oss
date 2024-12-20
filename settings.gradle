@@ -6,6 +6,11 @@ def isCI = System.getenv('CI') != null
 
 develocity {
   server = "https://develocity.sonar.build"
+  buildScan {
+    capture {
+      buildLogging = !startParameter.taskNames.contains("properties")
+    }
+  }
 }
 
 buildCache {
