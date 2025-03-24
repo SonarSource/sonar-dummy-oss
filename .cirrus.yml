@@ -1,70 +1,73 @@
-env:
-  CIRRUS_CLONE_DEPTH: "20"
-  # Use bash (instead of sh on linux or cmd.exe on Windows)
-  CIRRUS_SHELL: bash
-
-  ARTIFACTORY_URL: VAULT[development/kv/data/repox data.url]
-  ARTIFACTORY_PRIVATE_USERNAME: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader username]
-  ARTIFACTORY_PRIVATE_PASSWORD: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader access_token]
-
-  GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
-
-  DEVELOCITY_TOKEN: VAULT[development/kv/data/develocity data.token]
-  DEVELOCITY_ACCESS_KEY: develocity.sonar.build=${DEVELOCITY_TOKEN}
-
 eks_container: &CONTAINER_DEFINITION
   image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
   namespace: default
 
-setup_gradle_cache_template: &SETUP_GRADLE_CACHE
-  gradle_cache:
-    folder: .gradle/caches
-  create_gradle_directory_script:
-    - mkdir -p "${GRADLE_USER_HOME}"
-
-cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
-  cleanup_gradle_script:
-    - /usr/bin/find "${GRADLE_USER_HOME}/caches/" -name "*.lock" -type f -delete
-    - rm -rf "${GRADLE_USER_HOME}/caches/4.10.2/"
-    - rm -rf "${GRADLE_USER_HOME}/caches/journal-1/"
-    - rm -rf "${GRADLE_USER_HOME}/caches/build-cache-1/"
-
 build_task:
   eks_container:
     <<: *CONTAINER_DEFINITION
     cpu: 2
     memory: 2G
-  env:
-    # Possible values for ARTIFACTORY_DEPLOY_REPO: sonarsource-private-qa, sonarsource-public-qa
-    ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
-    ARTIFACTORY_DEPLOY_USERNAME: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-qa-deployer username]
-    ARTIFACTORY_DEPLOY_PASSWORD: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-qa-deployer access_token]
-    #allow deployment of pull request artifacts to repox
-    DEPLOY_PULL_REQUEST: "true"
-
-    # analysis on next
-    SONAR_HOST_URL: VAULT[development/kv/data/next data.url]
-    SONAR_TOKEN: VAULT[development/kv/data/next data.token]
-
-    ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
-    ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
-    ORG_GRADLE_PROJECT_signingKeyId: VAULT[development/kv/data/sign data.key_id]
-  <<: *SETUP_GRADLE_CACHE
-  build_script:
-    - source cirrus-env BUILD
-    - regular_gradle_build_deploy_analyze
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
-
-promote_task:
-  depends_on:
-    - build
-  eks_container:
-    <<: *CONTAINER_DEFINITION
-    cpu: 2
-    memory: 2G
-  env:
-    ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
-    GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
-  script: cirrus_promote_gradle
+  main_script:
+    - hello
+aws_credentials:
+  role_arn: arn:aws:iam::275878209202:role/approles/CirrusCI-11
+  role_session_name: cirrus
+  region: eu-central-1
+ec2_instance:
+  subnet_filters:
+    - name: tag:Product
+      values:
+        - CirrusCI
+    - name: tag:EnvType
+      values:
+        - prod
+    - name: tag:EnvName
+      values:
+        - prod
+    - name: tag:version
+      values:
+        - 6
+    - name: tag:aws-cdk:subnet-name
+      values:
+        - PrivateSubnet
+  image_owners:
+    - self
+    - "275878209202"
+    - "166916561812"
+    - "460386131003"
+eks_container:
+  builder_subnet_filters:
+    - name: tag:Product
+      values:
+        - CirrusCI
+    - name: tag:EnvType
+      values:
+        - prod
+    - name: tag:EnvName
+      values:
+        - prod
+    - name: tag:version
+      values:
+        - 6
+    - name: tag:aws-cdk:subnet-name
+      values:
+        - PrivateSubnet
+  nodeSelectorTerms:
+    - matchExpressions:
+        - key: node.kubernetes.io/instance-type
+          operator: In
+          values:
+            - m7a.8xlarge
+            - c7a.8xlarge
+            - r7a.8xlarge
+  builder_image_owners:
+    - self
+    - "275878209202"
+    - "166916561812"
+    - "460386131003"
+env:
+  CIRRUS_AWS_ACCOUNT: "275878209202"
+  CIRRUS_CLUSTER_NAME: CirrusCI-11
+  CIRRUS_AGENT_VERSION: 1.136.0
