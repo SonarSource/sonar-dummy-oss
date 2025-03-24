@@ -10,7 +10,7 @@ build_task:
     cpu: 2
     memory: 2G
   main_script:
-    - hello
+    - echo hello
 aws_credentials:
   role_arn: arn:aws:iam::275878209202:role/approles/CirrusCI-11
   role_session_name: cirrus
