@@ -55,6 +55,7 @@ build_task:
   build_script:
     - source cirrus-env BUILD
     - regular_gradle_build_deploy_analyze
+    - echo test
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 promote_task:
