@@ -2,16 +2,18 @@ name: Release
 
 # Trigger when publishing a new GitHub release
 on:
+  push:
   release:
     types:
       - published
+  workflow_dispatch:
 
 jobs:
   release:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@34d8b20d125bfd58d124e84b007d3a18e61c358a # 5.10.4
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@e8156aa462f1156946a130e6a77f219eff112d88 # test/smarini/BUILD-8328
     with:
       publishToBinaries: true
       mavenCentralSync: true
