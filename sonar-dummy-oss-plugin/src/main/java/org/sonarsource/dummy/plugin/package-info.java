@@ -17,4 +17,4 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 @javax.annotation.ParametersAreNonnullByDefault
-package org.sonarsource.dummy.plugin;
+package io.github.tomverin.plugin;
