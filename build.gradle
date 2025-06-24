@@ -10,7 +10,7 @@ plugins {
 sonarqube {
   properties {
     property 'sonar.projectName', 'SonarSource :: dummy'
-    property 'sonar.projectKey', 'io.github.tomverin:dummy-oss'
+    property 'sonar.projectKey', 'org.sonarsource.dummy:dummy-oss'
   }
 }
 
@@ -126,7 +126,7 @@ artifactory {
       publishPom = true
       publishIvy = false
     }
-    clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_PUBLISH', 'io.github.tomverin:sonar-dummy-oss-plugin:jar,io.github.tomverin:sonar-dummy-oss-plugin:json:cyclonedx')
+    clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_PUBLISH', 'org.sonarsource.dummy:sonar-dummy-oss-plugin:jar,org.sonarsource.dummy:sonar-dummy-oss-plugin:json:cyclonedx')
   }
 
   clientConfig.info.setBuildName('sonar-dummy-oss')
