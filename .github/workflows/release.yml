@@ -11,7 +11,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@test/smarini/BUILD-8328
+    uses: SonarSource/gh-action_release/.github/workflows/main.yaml@feat/tom/BUILD-7998
     with:
       publishToBinaries: true
       mavenCentralSync: true
